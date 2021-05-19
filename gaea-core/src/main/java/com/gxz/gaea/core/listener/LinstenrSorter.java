@@ -12,6 +12,30 @@ public class LinstenrSorter implements Comparator<Listener<? extends Event>> {
     @Override
     public int compare(Listener<? extends Event> o1, Listener<? extends Event> o2) {
         int i = prioritySort(o1, o2);
+        if(i!=0){
+            return i;
+        }
+        return orderSort(o1,o2);
+    }
+
+    private int orderSort(Listener<? extends Event> o1, Listener<? extends Event> o2) {
+        boolean o1order = isOrder(o1);
+        boolean o2order = isOrder(o2);
+        if (o1order && o2order) {
+            return Integer.compare(orderValue(o1),orderValue(o1));
+        }
+        if (!o1order && !o2order) {
+            return 0;
+        }
+        return o1order ? -1 : 1;
+    }
+
+    private int orderValue(Listener<? extends Event> listener) {
+        if (listener instanceof OrderListener) {
+            return ((OrderListener) listener).getOrder();
+        }
+        return listener.getClass().getAnnotation(Order.class).value();
+
     }
 
 

@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
+ * 排序规则见 {@link LinstenrSorter}
  **/
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

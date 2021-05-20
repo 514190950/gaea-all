@@ -1,4 +1,4 @@
-package com.gxz.gaea.core.listener;
+package com.gxz.gaea.core.component;
 
 
 import com.gxz.gaea.core.event.Event;
@@ -44,7 +44,7 @@ public class ListenerManager implements ApplicationContextAware {
                 listener.listen(event);
             }
         }
-        if(!CollectionUtils.isEmpty(allEventListeners)){
+        if (!CollectionUtils.isEmpty(allEventListeners)) {
             for (Listener<Event> eventListener : allEventListeners) {
                 eventListener.listen(event);
             }
@@ -62,9 +62,9 @@ public class ListenerManager implements ApplicationContextAware {
         allEventListeners = new ArrayList<>();
         beansOfType.forEach((k, v) -> {
             Class<? extends Event> eventGeneric = getEventGeneric(v.getClass());
-            if(eventGeneric == Event.class){
+            if (eventGeneric == Event.class) {
                 allEventListeners.add(v);
-            }else{
+            } else {
                 listenerMap.computeIfAbsent(eventGeneric, (key) -> new ArrayList<>()).add(v);
             }
             if (log.isTraceEnabled()) {
@@ -72,6 +72,17 @@ public class ListenerManager implements ApplicationContextAware {
             }
         });
 
+        sortAllListeners();
+    }
+
+    private void sortAllListeners() {
+        GaeaComponentSorter gaeaComponentSorter = GaeaComponentSorter.getInstance();
+        if (!CollectionUtils.isEmpty(allEventListeners)) {
+            allEventListeners.sort(gaeaComponentSorter);
+        }
+        if (!CollectionUtils.isEmpty(listenerMap)) {
+            listenerMap.values().forEach((list) -> list.sort(gaeaComponentSorter));
+        }
     }
 
     /***

@@ -9,16 +9,19 @@ import java.io.File;
  * 解析TextMessage到String
  **/
 public class TextMessageFileCollector implements Collector<TextMessage, File> {
+
     @Override
-    public File collect(TextMessage textMessage) {
+    public File collect(TextMessage textMessage) throws CollectorException {
         try {
             File file = new File(textMessage.getText());
-            if(file.exists()){
+            if (file.exists()) {
                 return file;
             }
+            String message = "文件" + file.getAbsolutePath() + "不存在";
+            throw new CollectorException(this, textMessage, message);
         } catch (JMSException e) {
-            e.printStackTrace();
+            throw new CollectorException(this, textMessage, e.getMessage());
         }
-        return null;
+
     }
 }

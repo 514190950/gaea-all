@@ -35,7 +35,7 @@ public class CollectorCombination implements ApplicationContextAware {
     }
 
 
-    public <Input, Output> Output adapt(Input input, Class<Output> outputClass) {
+    public <Input, Output> Output adapt(Input input, Class<Output> outputClass) throws CollectorException {
         Collector inputAdapter = matchCollector(input, outputClass);
         if (inputAdapter == null) {
             throw new IllegalArgumentException(

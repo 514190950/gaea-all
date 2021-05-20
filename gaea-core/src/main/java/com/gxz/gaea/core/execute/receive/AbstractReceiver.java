@@ -9,7 +9,8 @@ import com.gxz.gaea.core.event.BeforeCollectorEvent;
 import com.gxz.gaea.core.event.BeforeFreeEvent;
 import com.gxz.gaea.core.execute.analyst.Analyst;
 import com.gxz.gaea.core.execute.collector.CollectorCombination;
-import com.gxz.gaea.core.listener.ListenerManager;
+import com.gxz.gaea.core.execute.collector.CollectorException;
+import com.gxz.gaea.core.component.ListenerManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.context.ApplicationContextAware;
  */
 @Slf4j
 public abstract class AbstractReceiver<In, A> implements Receiver<In>, ApplicationContextAware {
+
 
 
     protected CollectorCombination collector;
@@ -69,8 +71,14 @@ public abstract class AbstractReceiver<In, A> implements Receiver<In>, Applicati
 
     protected A executeCollector(In in) {
         listenerManager.publish(new BeforeCollectorEvent(in));
-        A adapt = collector.adapt(in, analysisClass());
-        listenerManager.publish(new AfterCollectorEvent(in, adapt, collector));
+        A adapt = null;
+        try {
+            adapt = collector.adapt(in, analysisClass());
+            listenerManager.publish(new AfterCollectorEvent(in, adapt, collector));
+        } catch (CollectorException e) {
+            e.printStackTrace();
+            return null;
+        }
         return adapt;
     }
 

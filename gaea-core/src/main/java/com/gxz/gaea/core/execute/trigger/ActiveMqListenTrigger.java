@@ -37,10 +37,13 @@ public abstract class ActiveMqListenTrigger implements MessageListenTrigger<Acti
 
     /**
      * 触发器iD
+     * todo 这里先写死 因为Src默认还是单一触发
      *
      * @return 获得触发器Id
      **/
-    public abstract String getId();
+    public String getId() {
+        return "default";
+    }
 
 
     @Override

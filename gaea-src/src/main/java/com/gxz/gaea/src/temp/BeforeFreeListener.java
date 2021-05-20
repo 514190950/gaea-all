@@ -1,7 +1,7 @@
 package com.gxz.gaea.src.temp;
 
 import com.gxz.gaea.core.event.BeforeFreeEvent;
-import com.gxz.gaea.core.listener.Listener;
+import com.gxz.gaea.core.component.Listener;
 import org.springframework.stereotype.Component;
 
 /**

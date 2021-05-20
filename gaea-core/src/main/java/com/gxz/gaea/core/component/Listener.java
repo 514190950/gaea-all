@@ -1,4 +1,4 @@
-package com.gxz.gaea.core.listener;
+package com.gxz.gaea.core.component;
 
 
 import com.gxz.gaea.core.event.Event;

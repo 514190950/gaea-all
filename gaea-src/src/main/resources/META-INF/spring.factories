@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationContextInitializer =com.gxz.gaea.src.config.GaeaPropertyFilePathConfiguration
+

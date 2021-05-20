@@ -12,9 +12,11 @@ public interface Collector<Input, OutPut> {
      * 负责接收数据流交给后面
      *
      * @param input 数据内容
+     * @throws CollectorException 可能抛出收集异常
      * @return 返回内容 可以为null
+     *
      */
-    OutPut collect(Input input);
+    OutPut collect(Input input) throws CollectorException;
 
     /**
      * 如果collect方法的返回值是null  是否终止此次输入程序执行

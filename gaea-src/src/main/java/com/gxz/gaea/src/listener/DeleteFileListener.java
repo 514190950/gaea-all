@@ -1,7 +1,7 @@
-package com.gxz.gaea.src.listen;
+package com.gxz.gaea.src.listener;
 
 import com.gxz.gaea.core.event.AfterFreeEvent;
-import com.gxz.gaea.core.listener.Listener;
+import com.gxz.gaea.core.component.Listener;
 import com.gxz.gaea.src.config.SrcConfig;
 import lombok.extern.slf4j.Slf4j;
 

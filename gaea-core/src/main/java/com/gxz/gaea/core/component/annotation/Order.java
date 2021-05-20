@@ -1,5 +1,7 @@
-package com.gxz.gaea.core.listener;
+package com.gxz.gaea.core.component.annotation;
 
+
+import com.gxz.gaea.core.component.GaeaComponentSorter;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,7 +11,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
- * 排序规则见 {@link LinstenrSorter}
+ * 排序规则见 {@link GaeaComponentSorter}
  **/
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

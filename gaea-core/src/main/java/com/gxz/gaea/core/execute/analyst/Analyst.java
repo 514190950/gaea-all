@@ -20,6 +20,8 @@ public interface Analyst<In> {
      *
      * @param in in
      */
-    void free(In in);
+    default void free(In in){
+
+    }
 
 }

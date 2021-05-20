@@ -4,28 +4,25 @@ import com.gxz.gaea.core.execute.receive.Receiver;
 import com.gxz.gaea.core.execute.trigger.ActiveMqListenTrigger;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.jms.TextMessage;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-@Component
 public class TestMessageTrigger extends ActiveMqListenTrigger {
 
+
+    private final String destination;
 
     @Autowired
     private Receiver<ActiveMQMessage> receiver;
 
-    @Override
-    public String getDestination() {
-        return "test";
+    public TestMessageTrigger(String destination) {
+        this.destination = destination;
     }
 
     @Override
-    public String getId() {
-        return "test监听器";
+    public String getDestination() {
+        return destination;
     }
 
 

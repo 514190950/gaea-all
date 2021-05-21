@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Bean;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-@EnableConfigurationProperties(SrcConfig.class)
+@EnableConfigurationProperties(SrcEnvironment.class)
 public class SrcAutoConfiguration {
 
 
     @Bean
-    public DeleteFileListener deleteFileListener(SrcConfig config){
+    public DeleteFileListener deleteFileListener(SrcEnvironment config){
         return new DeleteFileListener(config);
     }
 
@@ -30,7 +30,6 @@ public class SrcAutoConfiguration {
     public Analyst<?> analyst(){
         return new DefaultSrcAnalyst();
     }
-
 
 
 }

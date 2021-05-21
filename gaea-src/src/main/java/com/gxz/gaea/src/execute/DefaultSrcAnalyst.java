@@ -13,12 +13,13 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -49,11 +50,10 @@ public class DefaultSrcAnalyst<M extends CsvData> implements Analyst<File> {
     @Override
     public void analysis(File file) {
         List<String> lines = FileUtil.readLines(file, StandardCharsets.UTF_8);
-        if(isSerial()){
+        if (isSerial()) {
             analysisLines(lines);
         }
         System.out.println("解析了");
-
 
 
 //            if (properties.getExecutor() <= 1 || properties.getExecutor() <= lines.size() * 10) {
@@ -107,83 +107,38 @@ public class DefaultSrcAnalyst<M extends CsvData> implements Analyst<File> {
             }
 
             // 添加
-             // appendCsvData(pack);
+            // appendCsvData(pack);
         }
     }
 
-//    /**
-//     * 把实体添加到csv缓存中  如果缓存超过了一定量 就输出一次 释放缓存
-//     */
-//    protected void appendCsvData(M data, String category) {
+    /**
+     * 把实体添加到csv缓存中  如果缓存超过了一定量 就输出一次 释放缓存
+     * 这里使用SynchronizedList 而不使用 CopyOnWriteArrayList
+     * 因为CopyOnWrite原理是通过每一次添加都复制来保证在何时都可以遍历出完整list
+     * 而Src业务并不需要遍历 只需要最后整理 使用SynchronizedList可以使效率大大提高
+     */
+    protected void appendCsvData(M data, String category) {
+        // TODO: 2021/5/21 如何拿到SRC文件？
+//        String s = data.toCsv();
 //        String fileName = SrcCsvFactory.getCsvFileName(data, category,
 //                gaeaEnvironment.getNodeName());
 //        String csvLine = SrcCsvFactory.toCsv(data);
 //        Long captureTime = data.getCaptureTime();
-//        this.csvMap.computeIfAbsent(fileName, (k) -> new CopyOnWriteArrayList<>()).add(csvLine);
-//        if (minTime.get() == 0L || captureTime < minTime.get()) {
-//            minTime.set(captureTime);
-//        }
-//        if (captureTime > maxTime.get()) {
-//            maxTime.set(captureTime);
-//        }
+//        this.csvMap.computeIfAbsent(fileName, (k) -> Collections.synchronizedList(new ArrayList<>())).add(csvLine);
 //        if (csvCount.incrementAndGet() >= this.properties.getMaxLine()) {
 //            // 如果数量超过了阈值 写文件
 //            outputCsvData();
 //        }
-//    }
-
-
-
-
-    public static void main(String[] args) throws IOException {
-        // 所有文件都在这个root下面建
-        String root = "/Users/gongxuanzhang/教程/雷丰阳设计模式加源码解析/test/";
-        String[] dirNames = new String[1000];
-        // 1000个上级文件夹名
-        for (int i = 0; i < dirNames.length; i++) {
-            dirNames[i] = root + "父文件夹"+i;
-        }
-        // 30000个文件平均落在10000个文件夹下面
-        File[] allFile = new File[30000];
-        for (int i = 0; i < 30000; i++) {
-            allFile[i] = new File(dirNames[i % 1000] + "/" + "文件" + i + "txt");
-        }
-        long st = System.currentTimeMillis();
-       // String policy = firstDir(dirNames,allFile);
-         String policy = allFile(allFile);
-        System.out.println(policy);
-        System.out.println(System.currentTimeMillis() - st);
-
-    }
-    public static String firstDir(String[] dirNames,File[] allFile){
-        for (int i = 0; i < dirNames.length; i++) {
-            new File(dirNames[i]).mkdirs();
-        }
-        for (File file : allFile) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "先建文件夹 然后把所有的文件都建了";
     }
 
-    public static String allFile( File[] allFile){
-        for (File file : allFile) {
-            File parentFile = file.getParentFile();
-            if(!parentFile.exists()){
-                parentFile.mkdirs();
-            }
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "不管文件夹 直接把所有的都建了";
-    }
 
+    private void appendCsv(File file, Collection<String> lines) {
+        File parentFile = file.getParentFile();
+        if (parentFile.exists() || parentFile.mkdirs()) {
+            FileUtil.appendUtf8Lines(lines, file);
+        }
+        log.error("文件{}无法创建", file);
+    }
 
 
 

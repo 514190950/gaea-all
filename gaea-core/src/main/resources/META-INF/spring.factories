@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.gxz.gaea.core.config.GaeaListenerManagerAutoConfiguration
+
+org.springframework.context.ApplicationListener=com.gxz.gaea.core.config.GaeaHomeInjection

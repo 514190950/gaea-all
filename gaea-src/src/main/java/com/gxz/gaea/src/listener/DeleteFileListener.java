@@ -2,7 +2,7 @@ package com.gxz.gaea.src.listener;
 
 import com.gxz.gaea.core.event.AfterFreeEvent;
 import com.gxz.gaea.core.component.Listener;
-import com.gxz.gaea.src.config.SrcConfig;
+import com.gxz.gaea.src.config.SrcEnvironment;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -17,7 +17,7 @@ public class DeleteFileListener implements Listener<AfterFreeEvent> {
 
     private final boolean back;
 
-    public DeleteFileListener(SrcConfig config) {
+    public DeleteFileListener(SrcEnvironment config) {
         this.delete = config.isDeleteFile();
         this.back = config.isBackFile();
     }

@@ -8,7 +8,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  **/
 @ConfigurationProperties("gaea.src")
 @Data
-public class SrcConfig {
+public class SrcEnvironment {
+
+    /**
+     * src当前模块
+     **/
+    private String module;
+
 
     /**
      * src层是否删除源文件

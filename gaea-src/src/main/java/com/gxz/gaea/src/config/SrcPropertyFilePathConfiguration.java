@@ -1,5 +1,6 @@
 package com.gxz.gaea.src.config;
 
+import com.gxz.gaea.core.config.GaeaProperty;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -14,7 +15,7 @@ import java.util.Map;
  * @author gxz
  * @date 2021/1/14 0:47
  */
-public class GaeaPropertyFilePathConfiguration implements ApplicationContextInitializer<ConfigurableApplicationContext>, Ordered {
+public class SrcPropertyFilePathConfiguration implements ApplicationContextInitializer<ConfigurableApplicationContext>, Ordered {
 
 
     @Override
@@ -25,6 +26,8 @@ public class GaeaPropertyFilePathConfiguration implements ApplicationContextInit
         Map<String, Object> nodeMap = new HashMap<>();
         nodeMap.put("gaea.a","手动注入的");
         propertySources.addLast(new GaeaProperty("gaeaNode", nodeMap));
+        String property = environment.getProperty("a.a");
+        System.out.println(property+" 这是我改看到的");
 
 
       /*  ConfigurableEnvironment environment = applicationContext.getEnvironment();
@@ -86,10 +89,4 @@ public class GaeaPropertyFilePathConfiguration implements ApplicationContextInit
         return Ordered.HIGHEST_PRECEDENCE + 11;
     }
 
-    public static class GaeaProperty extends MapPropertySource {
-
-        public GaeaProperty(String name, Map<String, Object> source) {
-            super(name, source);
-        }
-    }
 }

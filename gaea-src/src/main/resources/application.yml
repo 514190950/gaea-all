@@ -6,4 +6,6 @@ spring:
 gaea:
   src:
     delete-file: false
-    
+
+a:
+  a: asdf

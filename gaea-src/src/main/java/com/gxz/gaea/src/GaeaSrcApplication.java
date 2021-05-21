@@ -1,23 +1,16 @@
 package com.gxz.gaea.src;
 
-import com.gxz.gaea.core.config.GaeaConfig;
-import com.gxz.gaea.core.execute.receive.Receiver;
-import com.gxz.gaea.src.annotation.SrcSpringBootApplication;
+import com.gxz.gaea.src.annotation.GaeaSrc;
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.Map;
 
 /**
  * @author gongxuanzhang
  */
-@SrcSpringBootApplication(destination = "jianting")
+@GaeaSrc(destination = "jianting",module = "unknown")
 public class GaeaSrcApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(GaeaSrcApplication.class, args);
-        GaeaConfig bean = run.getBean(GaeaConfig.class);
-        System.out.println(bean.getA());
+        SpringApplication.run(GaeaSrcApplication.class,args);
     }
 
 }

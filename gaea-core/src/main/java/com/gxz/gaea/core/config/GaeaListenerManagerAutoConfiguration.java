@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @Configuration
-@EnableConfigurationProperties(GaeaConfig.class)
+@EnableConfigurationProperties(GaeaEnvironment.class)
 public class GaeaListenerManagerAutoConfiguration {
 
     @Bean

@@ -1,2 +1,4 @@
-org.springframework.context.ApplicationContextInitializer =com.gxz.gaea.src.config.GaeaPropertyFilePathConfiguration
+org.springframework.context.ApplicationContextInitializer=com.gxz.gaea.src.config.SrcPropertyFilePathConfiguration
 
+
+org.springframework.context.ApplicationListener=com.gxz.gaea.src.listener.GaeaSrcApplicationSpringInjection

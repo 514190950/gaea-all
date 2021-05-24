@@ -7,6 +7,7 @@ import com.gxz.gaea.core.execute.analyst.Analyst;
 import com.gxz.gaea.core.execute.analyst.LineAnalyst;
 import com.gxz.gaea.core.factory.ThreadPoolFactory;
 import com.gxz.gaea.core.model.CsvData;
+import com.gxz.gaea.src.config.SrcEnvironment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -36,6 +37,9 @@ public class DefaultSrcAnalyst<M extends CsvData> implements Analyst<File> {
 
     @Autowired(required = false)
     private List<Filter<M>> filters;
+
+    @Autowired
+    private SrcEnvironment srcEnvironment;
 
     /**
      * 当前csv输出中缓存的csv记录数
@@ -118,6 +122,8 @@ public class DefaultSrcAnalyst<M extends CsvData> implements Analyst<File> {
      * 而Src业务并不需要遍历 只需要最后整理 使用SynchronizedList可以使效率大大提高
      */
     protected void appendCsvData(M data, String category) {
+        String csvLine = data.toCsv();
+
         // TODO: 2021/5/21 如何拿到SRC文件？
 //        String s = data.toCsv();
 //        String fileName = SrcCsvFactory.getCsvFileName(data, category,

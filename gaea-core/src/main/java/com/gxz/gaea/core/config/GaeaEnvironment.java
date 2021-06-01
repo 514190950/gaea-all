@@ -44,5 +44,12 @@ public class GaeaEnvironment {
     private String nodeName;
 
 
+    // dataWarehouse下
+
+    private String dataWarehouseCsvPath;
+
+    private String dataWarehouseJsonPath;
+
+
 
 }

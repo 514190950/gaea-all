@@ -52,7 +52,12 @@ public class GaeaHomeInjection implements ApplicationListener<ApplicationEnviron
             dataPath = gaeaHome + File.separator + "data";
             srcProperty.put("gaea.config-path", dataPath);
         }
-        return new GaeaProperty("src-property", srcProperty);
+
+        String dataWarehousePath = dataPath + File.separator + "dataWareHouse" + File.separator;
+
+        srcProperty.put("gaea.data-warehouse-csv-path", dataWarehousePath + "csv" + File.separator);
+        srcProperty.put("gaea.data-warehouse-json-path", dataWarehousePath + "json" + File.separator);
+        return new GaeaProperty("gaea-property", srcProperty);
 
     }
 

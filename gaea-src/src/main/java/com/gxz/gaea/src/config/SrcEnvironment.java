@@ -39,4 +39,6 @@ public class SrcEnvironment {
      **/
     private int executor = 0;
 
+    private String module;
+
 }

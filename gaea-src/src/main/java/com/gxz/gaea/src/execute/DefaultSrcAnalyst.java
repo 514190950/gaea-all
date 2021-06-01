@@ -12,15 +12,18 @@ import com.gxz.gaea.core.execute.analyst.Analyst;
 import com.gxz.gaea.core.execute.analyst.LineAnalyst;
 import com.gxz.gaea.core.factory.ThreadPoolFactory;
 import com.gxz.gaea.core.util.DateUtils;
+import com.gxz.gaea.src.annotation.SrcLine;
 import com.gxz.gaea.src.config.SrcEnvironment;
 import com.gxz.gaea.src.model.SrcData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -81,13 +84,13 @@ public class DefaultSrcAnalyst<M extends SrcData> implements Analyst<File> {
         List<List<String>> partitions = Lists.partition(lines, (lines.size() / srcEnvironment.getExecutor()) + 1);
         CountDownLatch countDownLatch = new CountDownLatch(partitions.size());
         for (List<String> partition : partitions) {
-            executorService.submit(()->{
-                try{
+            executorService.submit(() -> {
+                try {
                     analysisLines(partition);
-                }catch (Exception e){
+                } catch (Exception e) {
                     log.error(e.getMessage());
                     log.error("解析实体时出现特殊异常");
-                }finally {
+                } finally {
                     countDownLatch.countDown();
                 }
             });
@@ -147,14 +150,9 @@ public class DefaultSrcAnalyst<M extends SrcData> implements Analyst<File> {
         Objects.requireNonNull(this.csvMap.computeIfAbsent(csvFilePath,
                 (k) -> {
                     final int outPutMaxLine = srcEnvironment.getOutPutMaxLine();
-                    try (FileAppender fa = isSerial ?
-                            new SimpleFileAppender(outPutMaxLine, () -> new File(csvFilePath)) :
-                            new ConcurrentFileAppender(outPutMaxLine, () -> new File(csvFilePath))) {
-                        return fa;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return isSerial ?
+                            new SimpleFileAppender(outPutMaxLine, () -> new File(csvFilePath), data.getHead()) :
+                            new ConcurrentFileAppender(outPutMaxLine, () -> new File(csvFilePath), data.getHead());
                 })).add(csvLine);
     }
 
@@ -163,15 +161,17 @@ public class DefaultSrcAnalyst<M extends SrcData> implements Analyst<File> {
      * 根据数据的捕获时间返回数据路径
      *
      * @param srcData src数据实体
-     * @return 文件名称 ${捕获时间 yyyyMMdd} / ${捕获时间 yyyyMMddHHmm}.${节点名称}.csv
+     * @return 文件名称 ${dataWareHouse}/csv/${模块名}/${捕获时间 yyyyMMdd} / ${捕获时间 yyyyMMddHHmm}.${节点名称}.csv
      **/
     private String getCsvFilePath(SrcData srcData) {
+        String dataWarehouseCsvPath = gaeaEnvironment.getDataWarehouseCsvPath();
         String nodeName = gaeaEnvironment.getNodeName();
         Long captureTime = srcData.getCaptureTime();
         String dirName = DateUtils.format(captureTime, "yyyyMMdd");
         String fileName = srcEnvironment.getProtocol() + "_"
                 + DateUtils.format(captureTime, "yyyyMMddHHmm") + "." + nodeName + ".csv";
-        return File.separator + dirName + File.separator + fileName;
+        return String.join(File.separator,
+                new String[]{dataWarehouseCsvPath, srcEnvironment.getModule(), dirName, fileName});
     }
 
 
@@ -187,6 +187,8 @@ public class DefaultSrcAnalyst<M extends SrcData> implements Analyst<File> {
 
     @Override
     public void free(File file) {
+        this.csvMap.forEach((k, v) -> v.write());
         this.csvMap = null;
     }
+
 }

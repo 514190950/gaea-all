@@ -1,12 +1,15 @@
 package com.gxz.gaea.core.component;
 
 import cn.hutool.core.io.FileUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -14,7 +17,7 @@ import java.util.function.Supplier;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
- *
+ * <p>
  * 此类可以执行[线程安全]的添加和输出文件操作
  * 你可以任意创建线程向此文件不断的add行数
  * 同时可以设置阈值 当文件行数达到阈值的时候，此类会自动将行数写入到指定文件中，此过程也是完全线程安全的，
@@ -27,6 +30,7 @@ import java.util.function.Supplier;
  * }
  * }
  **/
+@Slf4j
 public class ConcurrentFileAppender implements FileAppender {
 
     private final int writeMaxLines;
@@ -34,6 +38,10 @@ public class ConcurrentFileAppender implements FileAppender {
     private final List<String> lines;
 
     private final File file;
+
+    private String head;
+
+    private final AtomicBoolean headSuccess = new AtomicBoolean(false);
 
     private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private Lock readLock = readWriteLock.readLock();
@@ -43,24 +51,28 @@ public class ConcurrentFileAppender implements FileAppender {
     /**
      * @param writeMaxLines 行数阈值  当行数达到此值 自动输出文件
      * @param supplier      文件提供接口  可以使用lambda
-     * @throws IOException 文件无法创建或者出现了IO问题
      **/
-    public ConcurrentFileAppender(int writeMaxLines, Supplier<File> supplier) throws IOException {
-        this(writeMaxLines, supplier.get());
+    public ConcurrentFileAppender(int writeMaxLines, Supplier<File> supplier, String head) {
+        this(writeMaxLines, supplier.get(), head);
     }
 
     /**
      * @param writeMaxLines 行数阈值  当行数达到此值 自动输出文件
-     * @param file  提供文件
+     * @param file          提供文件
      **/
-    public ConcurrentFileAppender(int writeMaxLines, File file) throws IOException {
+    public ConcurrentFileAppender(int writeMaxLines, File file, String head) {
         this.writeMaxLines = writeMaxLines;
         this.lines = Collections.synchronizedList(new ArrayList<>());
         this.file = new File(file.getAbsolutePath());
-        if (!this.file.exists() && !this.file.getParentFile().mkdirs() && !this.file.createNewFile()) {
-            if (!file.exists()) {
-                throw new IOException(file.getAbsolutePath() + "文件无法创建");
+        this.head = head;
+        try {
+            if (!this.file.exists() && !this.file.getParentFile().mkdirs() && !this.file.createNewFile()) {
+                if (!file.exists()) {
+                    throw new RuntimeException(file.getAbsolutePath() + "文件无法创建");
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,6 +101,11 @@ public class ConcurrentFileAppender implements FileAppender {
         if (this.lines.isEmpty()) {
             return;
         }
+        if (!headSuccess.get()) {
+            lines.add(0, head);
+            headSuccess.set(true);
+        }
+        log.info("向{}输出了{}行数据", file.getAbsolutePath(), lines.size());
         FileUtil.appendUtf8Lines(this.lines, file);
         this.lines.clear();
     }

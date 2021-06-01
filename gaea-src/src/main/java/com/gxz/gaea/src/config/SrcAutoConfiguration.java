@@ -4,6 +4,7 @@ import com.gxz.gaea.core.execute.analyst.Analyst;
 import com.gxz.gaea.src.execute.DefaultSrcAnalyst;
 import com.gxz.gaea.src.execute.SrcReceive;
 import com.gxz.gaea.src.listener.DeleteFileListener;
+import com.gxz.gaea.src.model.SrcData;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

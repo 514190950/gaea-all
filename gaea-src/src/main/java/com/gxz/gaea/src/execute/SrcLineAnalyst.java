@@ -6,7 +6,7 @@ import com.gxz.gaea.core.model.CsvData;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public abstract class SrcLineAnalysis<M extends CsvData> implements LineAnalyst<M> {
+public abstract class SrcLineAnalyst<M extends CsvData> implements LineAnalyst<M> {
 
 
 }

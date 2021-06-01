@@ -11,6 +11,8 @@ import lombok.Data;
 public abstract class SrcData extends AbstractMetaData implements CsvData {
 
 
+    protected String id;
+
     /**
      * 是否将特殊会话的MAC地址字段转为外层五元组
      */

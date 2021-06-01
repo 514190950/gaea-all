@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 /**
  * @author gongxuanzhang
  */
-@GaeaSrc(destination = "jianting",module = "unknown")
+@GaeaSrc(destination = "jianting",module = "这是什么模块")
 public class GaeaSrcApplication {
 
     public static void main(String[] args) {

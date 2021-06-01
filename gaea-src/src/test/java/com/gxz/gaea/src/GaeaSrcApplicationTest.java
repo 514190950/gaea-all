@@ -1,5 +1,6 @@
 package com.gxz.gaea.src;
 
+import cn.hutool.core.util.HexUtil;
 import com.gxz.gaea.core.execute.receive.Receiver;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
@@ -19,6 +20,10 @@ class GaeaSrcApplicationTest {
         ActiveMQTextMessage activeMQTextMessage = new ActiveMQTextMessage();
         activeMQTextMessage.setText("/Users/gongxuanzhang/Desktop/未命名 2.txt");
         receiver.receive(activeMQTextMessage);
+    }
+
+    @Test
+    public void test(){
     }
 
 }

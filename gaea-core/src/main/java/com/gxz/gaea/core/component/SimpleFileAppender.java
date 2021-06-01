@@ -77,11 +77,13 @@ public class SimpleFileAppender implements FileAppender {
         if (this.lines.isEmpty()) {
             return;
         }
-        if(!headSuccess){
-            lines.add(0,head);
+        int outSize = lines.size();
+        if (!headSuccess) {
+            lines.add(0, head);
             headSuccess = true;
+            outSize--;
         }
-        log.info("向{}输出了{}行数据", file.getAbsolutePath(), lines.size());
+        log.info("向{}输出了{}行数据", file.getAbsolutePath(), outSize);
         FileUtil.appendUtf8Lines(this.lines, file);
         this.lines.clear();
     }

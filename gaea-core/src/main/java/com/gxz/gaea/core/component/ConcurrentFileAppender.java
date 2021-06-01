@@ -101,11 +101,13 @@ public class ConcurrentFileAppender implements FileAppender {
         if (this.lines.isEmpty()) {
             return;
         }
+        int outSize = this.lines.size();
         if (!headSuccess.get()) {
             lines.add(0, head);
             headSuccess.set(true);
+            outSize--;
         }
-        log.info("向{}输出了{}行数据", file.getAbsolutePath(), lines.size());
+        log.info("向{}输出了{}行数据", file.getAbsolutePath(), outSize);
         FileUtil.appendUtf8Lines(this.lines, file);
         this.lines.clear();
     }

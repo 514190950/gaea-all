@@ -13,7 +13,7 @@ public class SrcEnvironment {
     /**
      * src当前模块
      **/
-    private String module;
+    private String protocol;
 
 
     /**
@@ -26,5 +26,17 @@ public class SrcEnvironment {
      **/
     private boolean backFile;
 
+
+    private int outPutMaxLine = 30000;
+
+    /**
+     * 当文件行数少于此值时  强制使用单线程执行
+     **/
+    private int serialMax = 10000;
+
+    /**
+     * 多线程数  当小于等于1时视为单线程
+     **/
+    private int executor = 0;
 
 }

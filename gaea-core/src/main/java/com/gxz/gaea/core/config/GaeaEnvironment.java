@@ -41,5 +41,8 @@ public class GaeaEnvironment {
     private String dataPath;
 
 
+    private String nodeName;
+
+
 
 }

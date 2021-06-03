@@ -2,7 +2,7 @@ package com.gxz.gaea.src.config;
 
 
 import com.gxz.gaea.src.annotation.GaeaSrc;
-import com.gxz.gaea.src.temp.TestMessageTrigger;
+import com.gxz.gaea.src.temp.SrcMessageTrigger;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -29,7 +29,7 @@ public class ImportActiveMqMessageTrigger implements ImportBeanDefinitionRegistr
         Assert.hasLength(module, "SrcSpringBootApplication 注解上面没有内容 或者是空字符串");
 
         // 注册ActiveMq触发器
-        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(TestMessageTrigger.class);
+        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(SrcMessageTrigger.class);
         ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
         constructorArgumentValues.addGenericArgumentValue(destination);
         rootBeanDefinition.setConstructorArgumentValues(constructorArgumentValues);

@@ -6,9 +6,13 @@ import org.apache.activemq.command.ActiveMQMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ *
+ * src默认使用ActiveMq作为 触发器
+ *
+ *
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public class TestMessageTrigger extends ActiveMqListenTrigger {
+public class SrcMessageTrigger extends ActiveMqListenTrigger {
 
 
     private final String destination;
@@ -16,7 +20,7 @@ public class TestMessageTrigger extends ActiveMqListenTrigger {
     @Autowired
     private Receiver<ActiveMQMessage> receiver;
 
-    public TestMessageTrigger(String destination) {
+    public SrcMessageTrigger(String destination) {
         this.destination = destination;
     }
 

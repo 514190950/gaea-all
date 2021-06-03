@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class GaeaEnvironment {
-
     /**
      * 当收集器收集到null或者捕获异常的时候是否终止此次之行
      **/

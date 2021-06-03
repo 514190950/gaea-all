@@ -53,6 +53,7 @@ public abstract class ActiveMqListenTrigger implements MessageListenTrigger<Acti
         endpoint.setDestination(getDestination());
         endpoint.setMessageListener(this);
         registrar.registerEndpoint(endpoint);
+        log.info("{}监听{}",this.getClass().getName(),getDestination());
     }
 
     /***

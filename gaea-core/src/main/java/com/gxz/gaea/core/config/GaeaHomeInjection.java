@@ -1,8 +1,5 @@
 package com.gxz.gaea.core.config;
 
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
@@ -16,19 +13,17 @@ import java.util.Map;
  * 初始化Gaea环境
  **/
 
-public class GaeaHomeInjection implements ApplicationListener<ApplicationEnvironmentPreparedEvent>,
-        PriorityOrdered {
+public class GaeaHomeInjection {
 
-    @Override
-    public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+    public static void inject(ConfigurableEnvironment environment) {
         // 注册gaea 环境
-        ConfigurableEnvironment environment = event.getEnvironment();
         MutablePropertySources propertySources = environment.getPropertySources();
         GaeaProperty gaeaProperty = assemblyGaeaProperty(environment);
         propertySources.addLast(gaeaProperty);
     }
 
-    private GaeaProperty assemblyGaeaProperty(ConfigurableEnvironment environment) {
+    private static GaeaProperty assemblyGaeaProperty(ConfigurableEnvironment environment) {
+
         Map<String, Object> srcProperty = new HashMap<>();
         String gaeaHome = environment.getProperty("gaea.home");
         String configPath = environment.getProperty("gaea.config-path");
@@ -61,10 +56,5 @@ public class GaeaHomeInjection implements ApplicationListener<ApplicationEnviron
 
     }
 
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.gxz.gaea.src.config;
 
+import com.gxz.gaea.src.annotation.GaeaSrc;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -39,6 +40,9 @@ public class SrcEnvironment {
      **/
     private int executor = 0;
 
+    /**
+     * {@link GaeaSrc#module()}
+     **/
     private String module;
 
 }

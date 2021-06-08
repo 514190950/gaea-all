@@ -42,6 +42,10 @@ public class GaeaEnvironment {
 
     private String nodeName;
 
+    // back dir
+
+    private String backPath;
+
 
     // dataWarehouse下
 

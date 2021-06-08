@@ -11,6 +11,10 @@ import java.util.Map;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  * 初始化Gaea环境
+ * <p>
+ * 只有 GaeaApplicationContext 容器才能拥有
+ * {@link com.gxz.gaea.core.bootstrap.GaeaApplicationContext}
+ * {@link com.gxz.gaea.core.bootstrap.GaeaApplication}
  **/
 
 public class GaeaHomeInjection {
@@ -29,7 +33,6 @@ public class GaeaHomeInjection {
         String configPath = environment.getProperty("gaea.config-path");
         String logPath = environment.getProperty("gaea.log-path");
         String dataPath = environment.getProperty("gaea.data-path");
-        System.out.println(System.getProperty("user.dir"));
         if (!StringUtils.hasText(gaeaHome)) {
             gaeaHome = new File(System.getProperty("user.dir")).getParent();
             srcProperty.put("gaea.home", gaeaHome);
@@ -49,8 +52,9 @@ public class GaeaHomeInjection {
         }
 
         String dataWarehousePath = dataPath + File.separator + "dataWareHouse" + File.separator;
-
+        String backPath = dataPath + File.separator + "back";
         srcProperty.put("gaea.data-warehouse-csv-path", dataWarehousePath + "csv" + File.separator);
+        srcProperty.put("gaea.back-path", backPath);
         srcProperty.put("gaea.data-warehouse-json-path", dataWarehousePath + "json" + File.separator);
         return new GaeaProperty("gaea-property", srcProperty);
 

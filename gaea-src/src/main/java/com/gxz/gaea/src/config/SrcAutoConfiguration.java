@@ -1,5 +1,6 @@
 package com.gxz.gaea.src.config;
 
+import com.gxz.gaea.core.config.GaeaEnvironment;
 import com.gxz.gaea.core.execute.analyst.Analyst;
 import com.gxz.gaea.src.execute.DefaultSrcAnalyst;
 import com.gxz.gaea.src.execute.SrcReceive;
@@ -17,8 +18,8 @@ public class SrcAutoConfiguration {
 
 
     @Bean
-    public DeleteFileListener deleteFileListener(SrcEnvironment config){
-        return new DeleteFileListener(config);
+    public DeleteFileListener deleteFileListener(SrcEnvironment config, GaeaEnvironment environment){
+        return new DeleteFileListener(config,environment);
     }
 
     @Bean

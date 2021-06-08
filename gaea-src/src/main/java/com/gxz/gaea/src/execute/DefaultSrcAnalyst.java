@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.gxz.gaea.core.component.ConcurrentFileAppender;
 import com.gxz.gaea.core.component.FileAppender;
 import com.gxz.gaea.core.component.Filter;
+import com.gxz.gaea.core.component.FilterException;
 import com.gxz.gaea.core.component.GaeaComponentSorter;
 import com.gxz.gaea.core.component.SimpleFileAppender;
 import com.gxz.gaea.core.config.GaeaEnvironment;
@@ -129,8 +130,13 @@ public class DefaultSrcAnalyst<M extends SrcData> implements Analyst<File> {
             if (!CollectionUtils.isEmpty(filters)) {
                 for (Filter<M> filter : filters) {
                     if (!filter.filter(pack)) {
-                        //todo 这里可以加配置 当过滤器存在问题的时候可以使用策略
-                        break;
+                        // 执行策略
+                        Filter.Policy policy = filter.policy();
+                        if (policy == Filter.Policy.STOP) {
+                            break;
+                        } else if (policy == Filter.Policy.THROW) {
+                            throw new FilterException("过滤中出现问题", filter, pack);
+                        }
                     }
                 }
             }

@@ -1,7 +1,6 @@
 package com.gxz.gaea.core.event;
 
 
-import com.gxz.gaea.core.execute.collector.Collector;
 import com.gxz.gaea.core.execute.collector.CollectorCombination;
 
 /**

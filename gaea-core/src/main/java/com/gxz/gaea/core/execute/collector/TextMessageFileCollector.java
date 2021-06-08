@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
- * 解析TextMessage到String
+ * 解析TextMessage到文件
  **/
 public class TextMessageFileCollector implements Collector<TextMessage, File> {
 
